@@ -116,7 +116,7 @@ const Hero = () => {
               <div className="w-full h-full rounded-full bg-dark-800 flex items-center justify-center overflow-hidden">
                 {/* Profile image */}
                 <img 
-                  src="/Haris.png" 
+                  src="/Haris.jpeg" 
                   alt="Muhammad Haris" 
                   className="w-full h-full object-cover"
                   onError={(e) => {
