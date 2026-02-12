@@ -114,7 +114,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <h4 className="text-white font-semibold">Location</h4>
-                  <p className="text-gray-400">Islamabad, Pakistan</p>
+                  <p className="text-gray-400">Pakistan</p>
                 </div>
               </div>
             </motion.div>
