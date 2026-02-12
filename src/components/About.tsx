@@ -70,7 +70,7 @@ const About = () => {
                   <div className="pl-4 text-gray-300">
                     <div><span className="text-accent-cyan">name:</span> <span className="text-green-400">"Muhammad Haris"</span>,</div>
                     <div><span className="text-accent-cyan">role:</span> <span className="text-green-400">"AI Engineer"</span>,</div>
-                    <div><span className="text-accent-cyan">location:</span> <span className="text-green-400">"Islamabad, PK"</span>,</div>
+                    <div><span className="text-accent-cyan">location:</span> <span className="text-green-400">"Pakistan"</span>,</div>
                     <div><span className="text-accent-cyan">focus:</span> [</div>
                     <div className="pl-4">
                       <div><span className="text-green-400">"Medical AI"</span>,</div>
