@@ -2,119 +2,74 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
 }
 
 body {
-  font-family: 'Inter', system-ui, sans-serif;
-  background-color: #0a0a0f;
-  color: #ffffff;
+  font-family: 'Geist', system-ui, sans-serif;
+  background-color: #f7f5f0;
+  color: #14161a;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Custom scrollbar */
+::selection {
+  background: #1f5eff;
+  color: #ffffff;
+}
+
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #12121a;
+  background: #f7f5f0;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #6366f1, #a855f7);
-  border-radius: 4px;
+  background: #d3cfc4;
+  border-radius: 8px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #818cf8, #c084fc);
+  background: #1f5eff;
 }
 
-/* Glassmorphism utility */
-@layer utilities {
-  .glass {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-  
-  .glass-strong {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+:focus-visible {
+  outline: 2px solid #1f5eff;
+  outline-offset: 3px;
+}
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-8;
   }
 
-  .gradient-text {
-    background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #06b6d4 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  .chip {
+    @apply inline-flex items-center rounded-full border border-line bg-white px-3 py-1 text-xs font-medium text-ink-soft;
   }
 
-  .gradient-border {
-    position: relative;
-    background: linear-gradient(#12121a, #12121a) padding-box,
-                linear-gradient(135deg, #6366f1, #a855f7, #06b6d4) border-box;
-    border: 2px solid transparent;
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-all duration-300;
   }
 
-  .glow-effect {
-    box-shadow: 0 0 20px rgba(99, 102, 241, 0.3),
-                0 0 40px rgba(168, 85, 247, 0.2),
-                0 0 60px rgba(6, 182, 212, 0.1);
+  .btn-primary {
+    @apply btn bg-ink text-white hover:-translate-y-0.5 hover:bg-cobalt hover:shadow-lift;
   }
 
-  .text-shadow-glow {
-    text-shadow: 0 0 20px rgba(99, 102, 241, 0.5),
-                 0 0 40px rgba(168, 85, 247, 0.3);
+  .btn-outline {
+    @apply btn border border-ink/15 bg-white text-ink hover:-translate-y-0.5 hover:border-ink;
+  }
+
+  .card {
+    @apply rounded-3xl border border-line bg-white shadow-card;
   }
 }
 
-/* Animated background gradient */
-.animated-gradient-bg {
-  background: linear-gradient(-45deg, #0a0a0f, #1a1a25, #12121a, #0a0a0f);
-  background-size: 400% 400%;
-  animation: gradientBG 15s ease infinite;
-}
-
-@keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* Mesh gradient background */
-.mesh-gradient {
-  background-color: #0a0a0f;
-  background-image: 
-    radial-gradient(at 40% 20%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
-    radial-gradient(at 80% 0%, rgba(168, 85, 247, 0.15) 0px, transparent 50%),
-    radial-gradient(at 0% 50%, rgba(6, 182, 212, 0.1) 0px, transparent 50%),
-    radial-gradient(at 80% 50%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, rgba(168, 85, 247, 0.1) 0px, transparent 50%),
-    radial-gradient(at 80% 100%, rgba(6, 182, 212, 0.1) 0px, transparent 50%);
-}
-
-/* Section styling */
-section {
-  position: relative;
-}
-
-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.3), transparent);
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }

@@ -1,229 +1,104 @@
 import { motion } from 'framer-motion';
-import { Mail, Linkedin, Github, MapPin, Send, MessageSquare } from 'lucide-react';
+import { ArrowUpRight, Github, Linkedin, Mail, MapPin } from 'lucide-react';
+import { Magnetic, RevealLines } from './motion';
 
-interface ContactItem {
-  icon: React.ElementType;
-  label: string;
-  value: string;
-  href: string;
-  color: string;
-}
-
-const contactInfo: ContactItem[] = [
-  {
-    icon: Mail,
-    label: 'Email',
-    value: 'harisch075@gmail.com',
-    href: 'mailto:harisch075@gmail.com',
-    color: 'from-red-500 to-orange-500',
-  },
+const contactInfo = [
+  { icon: Mail, label: 'Email', value: 'harisch075@gmail.com', href: 'mailto:harisch075@gmail.com' },
   {
     icon: Linkedin,
     label: 'LinkedIn',
     value: 'linkedin.com/in/muhammad-haris',
     href: 'https://linkedin.com/in/muhammad-haris-089a40256',
-    color: 'from-blue-500 to-cyan-500',
   },
-  {
-    icon: Github,
-    label: 'GitHub',
-    value: 'github.com/muhammad-haris',
-    href: 'https://github.com/harry5702',
-    color: 'from-purple-500 to-pink-500',
-  },
+  { icon: Github, label: 'GitHub', value: 'github.com/harry5702', href: 'https://github.com/harry5702' },
 ];
 
 const Contact = () => {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: [0.6, -0.05, 0.01, 0.99],
-      },
-    },
-  };
-
   return (
-    <section id="contact" className="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-500/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-accent-purple/10 rounded-full blur-[100px]" />
-        <div className="absolute top-1/2 right-1/3 w-64 h-64 bg-accent-cyan/5 rounded-full blur-[80px]" />
-      </div>
-
-      <div className="max-w-5xl mx-auto relative z-10">
-        {/* Section Header */}
+    <section id="contact" className="pb-16 pt-8 md:pb-24">
+      <div className="container-x">
         <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.8 }}
+          className="relative overflow-hidden rounded-[2rem] bg-cobalt px-5 py-12 text-white sm:rounded-[2.5rem] sm:px-12 md:py-20 lg:px-16"
+          initial={{ opacity: 0, y: 50, scale: 0.97 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
         >
-          <motion.div
-            className="inline-flex items-center px-4 py-2 rounded-full glass text-primary-300 text-sm font-medium mb-4"
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-          >
-            <MessageSquare size={18} className="mr-2" />
-            Get In Touch
-          </motion.div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-display mb-4">
-            <span className="text-white">Let's </span>
-            <span className="gradient-text">Connect</span>
-          </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-            Let's build something impactful together
-          </p>
-        </motion.div>
+          {/* Decorative shapes */}
+          <motion.span
+            className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-coral"
+            animate={{ scale: [1, 1.08, 1] }}
+            transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <motion.span
+            className="absolute -bottom-24 right-1/3 h-56 w-56 rounded-[3rem] bg-mint"
+            animate={{ rotate: [12, 30, 12] }}
+            transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <span className="absolute right-24 top-40 hidden h-6 w-6 rounded-full bg-sun md:block" />
 
-        <div className="grid lg:grid-cols-2 gap-12">
-          {/* Left - Contact Info */}
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
-          >
-            {/* Location card */}
-            <motion.div
-              className="glass-strong rounded-2xl p-6 mb-6"
-              variants={itemVariants}
-              whileHover={{ y: -5 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="flex items-center gap-4">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500">
-                  <MapPin className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h4 className="text-white font-semibold">Location</h4>
-                  <p className="text-gray-400">Pakistan</p>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Contact cards */}
-            <div className="space-y-4">
-              {contactInfo.map((item) => (
-                <motion.a
-                  key={item.label}
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group block"
-                  variants={itemVariants}
-                >
-                  <motion.div
-                    className="glass-strong rounded-2xl p-6 hover:border-primary-500/30 transition-all duration-300 relative overflow-hidden"
-                    whileHover={{ y: -5, scale: 1.02 }}
-                    transition={{ duration: 0.3 }}
+          <div className="relative grid gap-12 lg:grid-cols-12 lg:items-end">
+            <div className="lg:col-span-7">
+              <span className="mb-6 inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-white/75">
+                <span className="h-0.5 w-8 rounded-full bg-sun" />
+                Contact
+              </span>
+              <h2 className="font-display text-[clamp(2.6rem,6vw,5rem)] font-extrabold leading-[0.98] tracking-tightest">
+                <RevealLines lines={["Let's build", 'something impactful.']} />
+              </h2>
+              <p className="mt-5 max-w-lg text-base leading-relaxed text-white/80 sm:mt-6 sm:text-lg">
+                I'm always open to discussing AI projects, collaborations or ideas, whether it's AI agents, medical AI,
+                computer vision or intelligent web applications.
+              </p>
+              <div className="mt-9 flex flex-wrap items-center gap-5">
+                <Magnetic strength={0.3}>
+                  <a
+                    href="mailto:harisch075@gmail.com"
+                    className="btn bg-sun px-6 py-3.5 text-base text-ink sm:px-7 sm:py-4 hover:-translate-y-0.5 hover:bg-white"
                   >
-                    {/* Hover gradient */}
-                    <div
-                      className={`absolute inset-0 bg-gradient-to-r ${item.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}
-                    />
-
-                    <div className="relative z-10 flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <div
-                          className={`p-3 rounded-xl bg-gradient-to-br ${item.color}`}
-                        >
-                          <item.icon className="w-6 h-6 text-white" />
-                        </div>
-                        <div>
-                          <h4 className="text-white font-semibold group-hover:text-primary-400 transition-colors">
-                            {item.label}
-                          </h4>
-                          <p className="text-gray-400 text-sm">{item.value}</p>
-                        </div>
-                      </div>
-                      <motion.div
-                        className="text-gray-500 group-hover:text-primary-400 transition-colors"
-                        whileHover={{ x: 5 }}
-                      >
-                        <Send size={20} />
-                      </motion.div>
-                    </div>
-                  </motion.div>
-                </motion.a>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Right - CTA Card */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            <div className="glass-strong rounded-3xl p-8 lg:p-10 h-full flex flex-col justify-center relative overflow-hidden">
-              {/* Background decoration */}
-              <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-primary-500/20 to-transparent rounded-bl-full" />
-              <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-accent-purple/20 to-transparent rounded-tr-full" />
-
-              <div className="relative z-10">
-                {/* Emoji */}
-                <motion.div
-                  className="text-6xl mb-6"
-                  animate={{ rotate: [0, 10, -10, 0] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                >
-                  🚀
-                </motion.div>
-
-                {/* Heading */}
-                <h3 className="text-2xl lg:text-3xl font-bold text-white mb-4">
-                  Ready to bring your{' '}
-                  <span className="gradient-text">AI ideas</span> to life?
-                </h3>
-
-                {/* Description */}
-                <p className="text-gray-400 mb-8 leading-relaxed">
-                  I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
-                  Whether it's medical AI, computer vision, or building intelligent web applications – let's create something amazing together.
-                </p>
-
-                {/* Availability badge */}
-                <div className="flex items-center gap-3 mb-8">
-                  <span className="relative flex h-3 w-3">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                  </span>
-                  <span className="text-green-400 font-medium">Available for new opportunities</span>
-                </div>
-
-                {/* CTA Button */}
-                <motion.a
-                  href="mailto:harisch075@gmail.com"
-                  className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-primary-600 to-accent-purple rounded-xl font-semibold text-white text-lg"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Mail size={20} />
-                  Send me an email
-                </motion.a>
+                    <Mail size={18} />
+                    Send me an email
+                  </a>
+                </Magnetic>
+                <span className="inline-flex items-center gap-2 text-sm text-white/75">
+                  <MapPin size={16} />
+                  Pakistan
+                </span>
               </div>
             </div>
-          </motion.div>
-        </div>
+
+            <ul className="space-y-3 lg:col-span-5">
+              {contactInfo.map((item, index) => (
+                <motion.li
+                  key={item.label}
+                  initial={{ opacity: 0, x: 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.3 + index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <a
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center gap-3 rounded-2xl bg-white p-3.5 text-ink sm:gap-4 sm:p-4 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lift"
+                  >
+                    <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-cobalt-soft text-cobalt transition-colors duration-300 group-hover:bg-cobalt group-hover:text-white">
+                      <item.icon size={20} />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-xs text-ink-faint">{item.label}</span>
+                      <span className="block truncate font-semibold">{item.value}</span>
+                    </span>
+                    <ArrowUpRight
+                      size={20}
+                      className="text-ink-faint transition-all duration-300 group-hover:rotate-45 group-hover:text-cobalt"
+                    />
+                  </a>
+                </motion.li>
+              ))}
+            </ul>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

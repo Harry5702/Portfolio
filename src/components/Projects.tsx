@@ -1,26 +1,98 @@
-import { motion } from 'framer-motion';
-import { Folder, ExternalLink, Github, Eye, MessageSquare, Vote } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { motion, MotionValue, useScroll, useTransform } from 'framer-motion';
+import { ArrowUpRight, Eye, Github, Globe, Lock, MessageSquare, MessagesSquare, Mic, Sparkles, Vote } from 'lucide-react';
+import SectionHeader from './SectionHeader';
 
 interface Project {
   title: string;
   subtitle: string;
+  tag?: string;
   icon: React.ElementType;
-  color: string;
   description: string;
   features: string[];
   technologies: string[];
-  image?: string;
-  link: string;
+  /** Omitted for private work; `note` is shown instead. */
+  link?: { href: string; kind: 'source' | 'live' };
+  note?: string;
+  theme: { card: string; panel: string; chip: string; button: string };
 }
 
 const projects: Project[] = [
   {
+    title: 'AI Interviewer Agent',
+    subtitle: 'Voice AI Technical Screening',
+    tag: 'Galixo',
+    icon: Mic,
+    description:
+      "A self-hosted platform that runs structured technical screening interviews as a live spoken conversation with an AI interviewer, in English or Urdu, entirely in the candidate's browser.",
+    features: [
+      'Real-time voice pipeline over WebRTC: speech-to-text, LLM, text-to-speech',
+      'Role-aware interview plan with real English and Urdu voices',
+      'LLM scoring against a versioned rubric, held for recruiter review before any email goes out',
+      'Device checks, consent flow and two-strike fullscreen proctoring',
+      'Docker Compose stack: FastAPI, Node orchestrator, PostgreSQL, Redis Streams, MinIO, Caddy',
+    ],
+    technologies: ['Python', 'FastAPI', 'Pipecat', 'WebRTC', 'Next.js', 'PostgreSQL', 'Redis', 'Docker'],
+    note: 'Private · built at Galixo',
+    theme: {
+      card: 'bg-cobalt text-white',
+      panel: 'bg-white/10',
+      chip: 'bg-white/15 text-white',
+      button: 'bg-white text-ink hover:bg-sun',
+    },
+  },
+  {
+    title: 'Decoding of Life',
+    subtitle: 'AI Numerology Platform',
+    tag: 'Upwork project',
+    icon: Sparkles,
+    description:
+      'Calculates numerology numbers from a date of birth and has Gemini 2.5 Flash write a reading grounded strictly in a Chinese numerology reference book.',
+    features: [
+      'Numerology engine for inner, outer and yearly numbers with five-element mapping',
+      'Gemini readings grounded in a reference book, with retries and concurrency limits',
+      'Single-person and two-person compatibility reports',
+      'Free preview, plus a Stripe-paid full report with a branded PDF emailed via Resend',
+      'English and Chinese UI, with an admin panel for prompts, topics and the payment gate',
+    ],
+    technologies: ['Next.js', 'Gemini 2.5 Flash', 'Supabase', 'Stripe', 'Resend', 'Tailwind CSS'],
+    link: { href: 'https://www.decodingoflife.my/', kind: 'live' },
+    theme: {
+      card: 'bg-sun text-ink',
+      panel: 'bg-white/30',
+      chip: 'bg-white/50 text-ink',
+      button: 'bg-ink text-white hover:bg-white hover:text-ink',
+    },
+  },
+  {
+    title: 'Agentlyft',
+    subtitle: 'Multi-tenant WhatsApp AI SaaS',
+    tag: 'Ongoing',
+    icon: MessagesSquare,
+    description:
+      'Businesses connect their WhatsApp number, upload PDFs as a knowledge base, and get an AI chatbot that answers their customers only from that knowledge base.',
+    features: [
+      'RAG pipeline: BGE embeddings and pgvector search, answered by Llama 3.3 70B on Groq',
+      'Token-aware PDF chunking with Mistral OCR fallback for scanned documents',
+      'WhatsApp webhooks processed asynchronously with Celery and Redis, with dedup and quotas',
+      'Meta Embedded Signup, Stripe subscriptions and tokens encrypted at rest',
+      'Next.js dashboard for documents, conversations, billing and admin',
+    ],
+    technologies: ['FastAPI', 'Next.js', 'PostgreSQL', 'pgvector', 'Celery', 'Redis', 'Groq', 'Stripe'],
+    link: { href: 'https://www.agentlyft.tech/', kind: 'live' },
+    theme: {
+      card: 'bg-ink text-white',
+      panel: 'bg-white/10',
+      chip: 'bg-white/15 text-white',
+      button: 'bg-white text-ink hover:bg-mint',
+    },
+  },
+  {
     title: 'OptiPro',
     subtitle: 'AI-Powered Eye Diagnosis',
     icon: Eye,
-    color: 'from-blue-500 to-cyan-500',
     description:
-      'Advanced OCT retinal disease detection system for identifying CNV, DME, and Drusen conditions with high accuracy and transparency.',
+      'OCT retinal disease detection for CNV, DME and Drusen, with Grad-CAM heatmaps so a doctor can see why the model made each call.',
     features: [
       'ResNet-101 CNN for disease classification',
       'Grad-CAM explainability for transparent AI decisions',
@@ -29,15 +101,20 @@ const projects: Project[] = [
       'Doctor dashboard and patient appointment system',
     ],
     technologies: ['PyTorch', 'ResNet-101', 'Grad-CAM', 'Flask', 'React', 'Supabase'],
-    link: 'https://github.com/Harry5702/Optipro--A.I-Powered-Retinal-Diseases-Diagnosis',
+    link: { href: 'https://github.com/Harry5702/Optipro--A.I-Powered-Retinal-Diseases-Diagnosis', kind: 'source' },
+    theme: {
+      card: 'bg-coral text-ink',
+      panel: 'bg-white/25',
+      chip: 'bg-white/40 text-ink',
+      button: 'bg-ink text-white hover:bg-white hover:text-ink',
+    },
   },
   {
     title: 'AI Health Chatbot',
     subtitle: 'Intelligent Nutrition Assistant',
     icon: MessageSquare,
-    color: 'from-green-500 to-emerald-500',
     description:
-      'Smart health chatbot leveraging vector databases for personalized food recommendations and nutrition analysis.',
+      'A health chatbot that uses vector search for personalised food recommendations and nutrition analysis, including calorie estimates from food photos.',
     features: [
       'Flask + PostgreSQL + pgvector architecture',
       'Vector similarity search for food recommendations',
@@ -46,15 +123,20 @@ const projects: Project[] = [
       'Personalized health insights',
     ],
     technologies: ['Flask', 'PostgreSQL', 'pgvector', 'OpenCV', 'Python'],
-    link: 'https://github.com/SocialAiPinnacle/nutra_ai',
+    link: { href: 'https://github.com/SocialAiPinnacle/nutra_ai', kind: 'source' },
+    theme: {
+      card: 'bg-mint text-ink',
+      panel: 'bg-white/25',
+      chip: 'bg-white/40 text-ink',
+      button: 'bg-ink text-white hover:bg-white hover:text-ink',
+    },
   },
   {
     title: 'Politian',
     subtitle: 'Secure Voting System',
     icon: Vote,
-    color: 'from-purple-500 to-pink-500',
     description:
-      'Comprehensive electronic voting platform with advanced database features and real-time analytics for transparent elections.',
+      'An electronic voting platform built on database triggers, views and indexes for integrity, with real-time analytics for transparent elections.',
     features: [
       'Flask + SQLAlchemy + SQLite stack',
       'Database triggers, views, and indexes',
@@ -63,206 +145,144 @@ const projects: Project[] = [
       'Vote verification and audit trails',
     ],
     technologies: ['Flask', 'SQLAlchemy', 'SQLite', 'Chart.js', 'Bootstrap'],
-    link: 'https://github.com/Harry5702/Politian-Secure-Voting-System',
+    link: { href: 'https://github.com/Harry5702/Politian-Secure-Voting-System', kind: 'source' },
+    theme: {
+      card: 'bg-white text-ink',
+      panel: 'bg-canvas',
+      chip: 'bg-canvas text-ink',
+      button: 'bg-ink text-white hover:bg-cobalt',
+    },
   },
 ];
 
-const Projects = () => {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
+/** Stacking only works when a whole card fits on screen, so it's limited to large viewports. */
+const useIsDesktop = () => {
+  const [isDesktop, setIsDesktop] = useState(false);
+  useEffect(() => {
+    const query = window.matchMedia('(min-width: 1024px) and (min-height: 700px)');
+    const update = () => setIsDesktop(query.matches);
+    update();
+    query.addEventListener('change', update);
+    return () => query.removeEventListener('change', update);
+  }, []);
+  return isDesktop;
+};
 
-  const cardVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.8,
-        ease: [0.6, -0.05, 0.01, 0.99],
-      },
-    },
-  };
+const ProjectCard = ({
+  project,
+  index,
+  total,
+  progress,
+  stack,
+}: {
+  project: Project;
+  index: number;
+  total: number;
+  progress: MotionValue<number>;
+  stack: boolean;
+}) => {
+  // Each card shrinks a little once the next one starts sliding over it
+  const scale = useTransform(progress, [index / total, 1], [1, 1 - (total - 1 - index) * 0.05]);
+  const { theme } = project;
 
   return (
-    <section id="projects" className="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent-purple/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-primary-500/10 rounded-full blur-[100px]" />
-        <div className="absolute top-1/2 right-1/3 w-64 h-64 bg-accent-cyan/5 rounded-full blur-[80px]" />
-      </div>
-
-      <div className="max-w-6xl mx-auto relative z-10">
-        {/* Section Header */}
-        <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.8 }}
-        >
-          <motion.div
-            className="inline-flex items-center px-4 py-2 rounded-full glass text-primary-300 text-sm font-medium mb-4"
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-          >
-            <Folder size={18} className="mr-2" />
-            Featured Work
-          </motion.div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-display mb-4">
-            <span className="text-white">My </span>
-            <span className="gradient-text">Projects</span>
-          </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto">
-            Showcasing AI-powered solutions that solve real-world problems with innovation and precision
-          </p>
-        </motion.div>
-
-        {/* Projects Grid */}
-        <motion.div
-          className="space-y-8"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
-        >
-          {projects.map((project, index) => (
-            <motion.div
-              key={project.title}
-              className="group"
-              variants={cardVariants}
-            >
-              <motion.div
-                className="glass-strong rounded-3xl overflow-hidden hover:border-primary-500/30 transition-all duration-500"
-                whileHover={{ y: -8 }}
-                transition={{ duration: 0.3 }}
+    <div className={stack ? 'sticky top-28' : ''} style={stack ? { paddingTop: index * 28 } : undefined}>
+      <motion.article
+        style={stack ? { scale } : undefined}
+        className={`origin-top overflow-hidden rounded-[1.75rem] p-5 shadow-lift sm:rounded-[2rem] sm:p-10 lg:p-12 ${theme.card}`}
+        initial={{ opacity: 0, y: 60 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-60px' }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <div className="grid gap-8 lg:grid-cols-2 lg:gap-10">
+          <div className="flex flex-col">
+            <div className="mb-6 flex items-center justify-between sm:mb-8">
+              <span className={`grid h-14 w-14 place-items-center rounded-2xl ${theme.panel}`}>
+                <project.icon size={26} />
+              </span>
+              <span className="font-display text-5xl font-extrabold opacity-25 sm:text-6xl">0{index + 1}</span>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <p className="text-sm font-semibold uppercase tracking-wider opacity-80">{project.subtitle}</p>
+              {project.tag && (
+                <span className={`rounded-full px-3 py-0.5 text-xs font-semibold ${theme.chip}`}>{project.tag}</span>
+              )}
+            </div>
+            <h3 className="mt-2 font-display text-[2rem] font-extrabold leading-tight tracking-tightest sm:text-4xl md:text-6xl">{project.title}</h3>
+            <p className="mt-4 max-w-lg text-base leading-relaxed opacity-90 sm:mt-5 sm:text-lg">{project.description}</p>
+            {project.link ? (
+              <a
+                href={project.link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-cursor="View"
+                className={`btn mt-8 self-start lg:mt-auto ${theme.button}`}
               >
-                <div className="grid lg:grid-cols-5 gap-0">
-                  {/* Project Visual */}
-                  <div
-                    className={`lg:col-span-2 p-8 lg:p-12 relative overflow-hidden ${
-                      index % 2 === 1 ? 'lg:order-2' : ''
-                    }`}
-                  >
-                    <div
-                      className={`absolute inset-0 bg-gradient-to-br ${project.color} opacity-10`}
-                    />
-                    <div className="relative z-10 h-full flex flex-col justify-center items-center">
-                      {/* Project Icon */}
-                      <motion.div
-                        className={`p-6 rounded-2xl bg-gradient-to-br ${project.color} mb-6`}
-                        whileHover={{ scale: 1.1, rotate: 5 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <project.icon className="w-12 h-12 text-white" />
-                      </motion.div>
-                      
-                      {/* Tech stack visual */}
-                      <div className="flex flex-wrap justify-center gap-2">
-                        {project.technologies.slice(0, 4).map((tech) => (
-                          <span
-                            key={tech}
-                            className="px-3 py-1 text-xs font-medium text-white/80 bg-white/10 rounded-full"
-                          >
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
+                {project.link.kind === 'live' ? <Globe size={17} /> : <Github size={17} />}
+                {project.link.kind === 'live' ? 'Visit site' : 'View source'}
+                <ArrowUpRight size={17} />
+              </a>
+            ) : (
+              <p className="mt-8 inline-flex items-center gap-2 self-start text-sm font-semibold opacity-80 lg:mt-auto">
+                <Lock size={15} />
+                {project.note}
+              </p>
+            )}
+          </div>
 
-                  {/* Project Info */}
-                  <div
-                    className={`lg:col-span-3 p-8 lg:p-12 ${
-                      index % 2 === 1 ? 'lg:order-1' : ''
-                    }`}
-                  >
-                    {/* Title */}
-                    <div className="mb-4">
-                      <h3 className="text-2xl lg:text-3xl font-bold text-white mb-1 group-hover:text-primary-400 transition-colors">
-                        {project.title}
-                      </h3>
-                      <p className={`text-transparent bg-clip-text bg-gradient-to-r ${project.color} font-medium`}>
-                        {project.subtitle}
-                      </p>
-                    </div>
+          <div className={`rounded-2xl p-5 sm:rounded-3xl sm:p-8 ${theme.panel}`}>
+            <p className="mb-4 text-sm font-semibold uppercase tracking-wider opacity-80">Key features</p>
+            <ul className="space-y-3">
+              {project.features.map((feature) => (
+                <li key={feature} className="flex gap-3 text-[15px] leading-relaxed sm:text-base">
+                  <span className="mt-[0.55em] h-2 w-2 shrink-0 rounded-full bg-current opacity-60" />
+                  {feature}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-6 flex flex-wrap gap-2 sm:mt-8">
+              {project.technologies.map((tech) => (
+                <span key={tech} className={`rounded-full px-3 py-1 text-xs font-semibold ${theme.chip}`}>
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </motion.article>
+    </div>
+  );
+};
 
-                    {/* Description */}
-                    <p className="text-gray-400 mb-6 leading-relaxed">
-                      {project.description}
-                    </p>
+const Projects = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const stack = useIsDesktop();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] });
 
-                    {/* Features */}
-                    <ul className="space-y-2 mb-6">
-                      {project.features.map((feature, fIndex) => (
-                        <motion.li
-                          key={fIndex}
-                          className="flex items-start text-gray-300 text-sm"
-                          initial={{ opacity: 0, x: -10 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ delay: 0.3 + fIndex * 0.05 }}
-                        >
-                          <span
-                            className={`w-1.5 h-1.5 rounded-full mr-3 mt-2 flex-shrink-0 bg-gradient-to-r ${project.color}`}
-                          />
-                          {feature}
-                        </motion.li>
-                      ))}
-                    </ul>
+  return (
+    <section id="projects" className="py-20 md:py-32">
+      <div className="container-x">
+        <SectionHeader
+          eyebrow="Projects"
+          title="Selected"
+          highlight="work"
+          tone="mint"
+          aside="AI-powered solutions built end to end, from training the model to shipping the interface around it."
+        />
 
-                    {/* Technologies */}
-                    <div className="flex flex-wrap gap-2 mb-6">
-                      {project.technologies.map((tech) => (
-                        <span
-                          key={tech}
-                          className="px-3 py-1.5 text-sm font-medium text-gray-300 bg-dark-600/50 rounded-lg border border-white/5"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-
-                    {/* Action buttons */}
-                    <div className="flex gap-4">
-                      <motion.a
-                        href={project.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r ${project.color} text-white font-medium text-sm`}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        <ExternalLink size={16} />
-                        View Project
-                      </motion.a>
-                      <motion.a
-                        href={project.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 px-5 py-2.5 rounded-xl glass text-gray-300 font-medium text-sm hover:text-white hover:border-primary-500/30 transition-all"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        <Github size={16} />
-                        Source Code
-                      </motion.a>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            </motion.div>
+        <div ref={ref} className="space-y-10 pb-10">
+          {projects.map((project, index) => (
+            <ProjectCard
+              key={project.title}
+              project={project}
+              index={index}
+              total={projects.length}
+              progress={scrollYProgress}
+              stack={stack}
+            />
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

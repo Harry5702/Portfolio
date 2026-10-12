@@ -1,102 +1,42 @@
-import { motion } from 'framer-motion';
+import { MotionConfig } from 'framer-motion';
 import {
   Navbar,
   Hero,
-  Education,
+  Marquee,
   About,
-  Skills,
-  Projects,
   Experience,
+  Projects,
+  Skills,
+  Education,
   Certifications,
   Contact,
   Footer,
 } from './components';
+import { CursorLabel, ScrollProgress } from './components/motion';
 
 function App() {
   return (
-    <div className="min-h-screen bg-dark-900 text-white overflow-x-hidden">
-      {/* Navigation */}
-      <Navbar />
+    <MotionConfig reducedMotion="user">
+      <div className="min-h-screen overflow-x-clip bg-canvas text-ink">
+        <ScrollProgress />
+        <CursorLabel />
+        <Navbar />
 
-      {/* Main Content */}
-      <main>
-        {/* Hero Section */}
-        <Hero />
-
-        {/* Education Section - Immediately after Hero */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
-          <Education />
-        </motion.div>
-
-        {/* About Section */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
+        <main>
+          <Hero />
+          <Marquee />
           <About />
-        </motion.div>
-
-        {/* Skills Section */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
-          <Skills />
-        </motion.div>
-
-        {/* Projects Section */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
-          <Projects />
-        </motion.div>
-
-        {/* Experience Section */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
           <Experience />
-        </motion.div>
-
-        {/* Certifications Section */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
+          <Projects />
+          <Skills />
+          <Education />
           <Certifications />
-        </motion.div>
-
-        {/* Contact Section */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
           <Contact />
-        </motion.div>
-      </main>
+        </main>
 
-      {/* Footer */}
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </MotionConfig>
   );
 }
 
